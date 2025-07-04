@@ -2,8 +2,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copiar solo el archivo .csproj y restaurar dependencias (para aprovechar la caché de Docker)
-COPY *.csproj ./
+# Copiar el archivo .csproj (o .sln si usas solución) y restaurar dependencias
+COPY web_service_calculadora_despliegue.csproj ./  # Asegúrate de que el nombre del archivo sea correcto
 RUN dotnet restore
 
 # Copiar el resto de los archivos del proyecto
@@ -21,8 +21,9 @@ COPY --from=build /app/publish .
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV PORT=5000
 
-# Exponer el puerto de la aplicación (opcional, pero útil para el acceso al contenedor)
+# Exponer el puerto de la aplicación
 EXPOSE 5000
 
 # Iniciar la aplicación
 ENTRYPOINT ["dotnet", "web_service_calculadora_despliegue.dll"]
+
